@@ -22,6 +22,8 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Map the XML mapping files -->
-        <mapping resource="com/example/yourdomain/YourEntity.hbm.xml" />
+        <mapping resource="Departement.hbm.xml"/>
+        <mapping resource="Job.hbm.xml"/>
+        <mapping resource="Employee.hbm.xml"/>
     </session-factory>
 </hibernate-configuration>
