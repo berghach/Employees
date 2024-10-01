@@ -10,8 +10,8 @@
         <property name="email" column="email" type="string"/>
         <property name="phone" column="phone" type="string"/>
 
-        <!-- Many-to-One relationship with Departement -->
-        <many-to-one name="departement" class="com.example.domain.Departement" column="departement_id" not-null="true"/>
+        <!-- Many-to-One relationship with Department -->
+        <many-to-one name="department" class="com.example.domain.Department" column="department_id" not-null="true"/>
 
         <!-- Many-to-One relationship with Job -->
         <many-to-one name="job" class="com.example.domain.Job" column="job_id" not-null="true"/>
