@@ -8,7 +8,7 @@
         </id>
         <property name="name" column="name" type="string"/>
 
-        <!-- Many-to-One relationship with Departement -->
-        <many-to-one name="departement" class="com.example.domain.Departement" column="departement_id" not-null="true"/>
+        <!-- Many-to-One relationship with Department -->
+        <many-to-one name="department" class="com.example.domain.Department" column="department_id" not-null="true"/>
     </class>
 </hibernate-mapping>
