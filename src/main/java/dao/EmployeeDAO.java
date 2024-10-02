@@ -54,13 +54,26 @@ public class EmployeeDAO {
     public List<Employee> getByJob(Job job) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.enableFilter("jobFilter").setParameter("jobFilterParam", job.getId());
-            return session.createQuery("from Employee", Employee.class).list();
+            List<Employee> employees = session.createQuery("from Employee",Employee.class).list();
+
+            for(Employee employee : employees){
+                Hibernate.initialize(employee.getDepartment());
+                Hibernate.initialize(employee.getJob());
+            }
+            return employees;
         }
     }
-    public List<Employee> getByJob(Department department) {
+    public List<Employee> getByDepartment(Department department) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.enableFilter("departmentFilter").setParameter("departmentFilterParam", department.getId());
-            return session.createQuery("from Employee", Employee.class).list();
+
+            List<Employee> employees = session.createQuery("from Employee",Employee.class).list();
+
+            for(Employee employee : employees){
+                Hibernate.initialize(employee.getDepartment());
+                Hibernate.initialize(employee.getJob());
+            }
+            return employees;
         }
     }
 

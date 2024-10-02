@@ -3,6 +3,7 @@ package test;
 import dao.DepartmentDAO;
 import dao.EmployeeDAO;
 import dao.JobDAO;
+import entities.Department;
 import entities.Employee;
 
 import java.util.List;
@@ -20,6 +21,11 @@ public class EmployeeTest {
         List<Employee> rs = employeeDAO.getByName("David Wilson");
         System.out.println(rs.get(0).toString());
 
+        Department department = departmentDAO.get(1);
+        List<Employee> hr = employeeDAO.getByDepartment(department);
+        for(Employee item : hr){
+            System.out.println(item.toString());
+        }
 
     }
 }
