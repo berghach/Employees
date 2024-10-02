@@ -2,10 +2,22 @@
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
         "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-    <class name="com.example.domain.Department" table="department">
+    <class name="entities.Department" table="department">
         <id name="id" column="id">
             <generator class="native"/>
         </id>
         <property name="name" column="name" type="string"/>
+
+        <list name="employees" cascade="all" fetch="select">
+            <key column="department_id"/>
+            <list-index column="employee_index"/>
+            <one-to-many class="entities.Employee"/>
+        </list>
+
+        <list name="jobs" cascade="all" fetch="select">
+            <key column="department_id"/>
+            <list-index column="job_index"/>
+            <one-to-many class="entities.Job"/>
+        </list>
     </class>
 </hibernate-mapping>

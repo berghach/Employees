@@ -1,13 +1,18 @@
 package dao;
 
+import entities.Department;
 import entities.Employee;
+import entities.Job;
 import jakarta.transaction.SystemException;
 import jakarta.transaction.Transaction;
+import org.hibernate.Filter;
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import service.HibernateUtil;
+import util.HibernateUtil;
 
 import java.util.List;
+import java.util.Optional;
 
 public class EmployeeDAO {
 
@@ -24,7 +29,38 @@ public class EmployeeDAO {
     }
     public Employee get(int id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Employee.class, id);
+            Employee employee = session.get(Employee.class, id);
+            Hibernate.initialize(employee.getDepartment());
+            Hibernate.initialize(employee.getJob());
+
+            return employee;
+        }
+    }
+
+    public List<Employee> getByName(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            session.enableFilter("nameFilter").setParameter("nameFilterParam", name);
+
+            List<Employee> employees = session.createQuery("from Employee",Employee.class).list();
+
+            for(Employee employee : employees){
+                Hibernate.initialize(employee.getDepartment());
+                Hibernate.initialize(employee.getJob());
+            }
+            return employees;
+        }
+    }
+    public List<Employee> getByJob(Job job) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.enableFilter("jobFilter").setParameter("jobFilterParam", job.getId());
+            return session.createQuery("from Employee", Employee.class).list();
+        }
+    }
+    public List<Employee> getByJob(Department department) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.enableFilter("departmentFilter").setParameter("departmentFilterParam", department.getId());
+            return session.createQuery("from Employee", Employee.class).list();
         }
     }
 

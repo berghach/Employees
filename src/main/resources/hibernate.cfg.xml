@@ -22,7 +22,7 @@
         <property name="hibernate.format_sql">true</property>
 
         <!-- Map the XML mapping files -->
-        <mapping resource="orm/Departement.hbm.xml"/>
+        <mapping resource="orm/Department.hbm.xml"/>
         <mapping resource="orm/Job.hbm.xml"/>
         <mapping resource="orm/Employee.hbm.xml"/>
     </session-factory>

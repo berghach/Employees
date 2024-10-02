@@ -11,9 +11,28 @@
         <property name="phone" column="phone" type="string"/>
 
         <!-- Many-to-One relationship with Department -->
-        <many-to-one name="department" class="com.example.domain.Department" column="department_id" not-null="true"/>
+        <many-to-one name="department" class="entities.Department" column="department_id" not-null="true" fetch="join"/>
 
         <!-- Many-to-One relationship with Job -->
-        <many-to-one name="job" class="com.example.domain.Job" column="job_id" not-null="true"/>
+        <many-to-one name="job" class="entities.Job" column="job_id" not-null="true" fetch="join"/>
+
+        <!-- Define the filter -->
+
+        <filter name="nameFilter" condition="name = :nameFilterParam" />
+        <filter name="departmentFilter" condition="department_id = :departmentFilterParam" />
+        <filter name="jobFilter" condition="job_id = :jobFilterParam" />
+
     </class>
+
+    <filter-def name="nameFilter">
+        <filter-param name="nameFilterParam" type="string"/>
+    </filter-def>
+
+    <filter-def name="departmentFilter">
+        <filter-param name="departmentFilterParam" type="int"/>
+    </filter-def>
+
+    <filter-def name="jobFilter">
+        <filter-param name="jobFilterParam" type="int"/>
+    </filter-def>
 </hibernate-mapping>

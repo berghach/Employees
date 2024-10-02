@@ -8,8 +8,10 @@ public class Employee {
     private Department department;
     private Job job;
 
-    public Employee(int id, String name, String email, String phone, Department department, Job job) {
-        this.id = id;
+    public Employee(){
+    }
+
+    public Employee(String name, String email, String phone, Department department, Job job) {
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -63,5 +65,17 @@ public class Employee {
 
     public void setJob(Job job) {
         this.job = job;
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", department=" + department.toString() +
+                ", job=" + job.toString() +
+                '}';
     }
 }
