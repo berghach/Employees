@@ -3,9 +3,10 @@ package dao;
 import entities.Department;
 import entities.Employee;
 import entities.Job;
+
 import jakarta.transaction.SystemException;
-import jakarta.transaction.Transaction;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
 
@@ -18,7 +19,7 @@ public class EmployeeDAO implements DAO<Employee>{
     public void save(Employee employee) throws SystemException {
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            transaction = (Transaction) session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(employee);
             transaction.commit();
         } catch (Exception e) {
@@ -69,7 +70,7 @@ public class EmployeeDAO implements DAO<Employee>{
     public void update(Employee employee) throws SystemException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = (Transaction) session.beginTransaction();
+            transaction = session.beginTransaction();
             session.update(employee);
             transaction.commit();
         } catch (Exception e) {
@@ -82,7 +83,7 @@ public class EmployeeDAO implements DAO<Employee>{
     public boolean delete(Employee employee) throws SystemException{
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            transaction = (Transaction) session.beginTransaction();
+            transaction = session.beginTransaction();
             session.delete(employee);
             transaction.commit();
             return true;
