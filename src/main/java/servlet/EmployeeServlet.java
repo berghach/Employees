@@ -35,7 +35,11 @@ public class EmployeeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Employee> employeeList = employeeService.getAll();
+        List<Department> departmentList = departmentService.getAll();
+        List<Job> jobList = jobService.getAll();
         req.setAttribute("employees", employeeList);
+        req.setAttribute("departments", departmentList);
+        req.setAttribute("jobs", jobList);
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
@@ -45,12 +49,12 @@ public class EmployeeServlet extends HttpServlet {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
             String phone = req.getParameter("phone");
-            Optional<Department> department = departmentService.get(Integer.parseInt(req.getParameter("department_id")));
-            Optional<Job> job = jobService.get(Integer.parseInt(req.getParameter("job_id")));
+            Optional<Department> department = departmentService.get(Integer.parseInt(req.getParameter("department")));
+            Optional<Job> job = jobService.get(Integer.parseInt(req.getParameter("job")));
 
             Employee employee = new Employee(name, email, phone, department.orElse(null), job.orElse(null));
             employeeService.save(employee);
-            resp.sendRedirect("employees");
+            resp.sendRedirect("/");
         } catch (Exception e) {
             e.printStackTrace();
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create employee");
@@ -68,8 +72,8 @@ public class EmployeeServlet extends HttpServlet {
                 String name = req.getParameter("name");
                 String email = req.getParameter("email");
                 String phone = req.getParameter("phone");
-                Optional<Department> department = departmentService.get(Integer.parseInt(req.getParameter("department_id")));
-                Optional<Job> job = jobService.get(Integer.parseInt(req.getParameter("job_id")));
+                Optional<Department> department = departmentService.get(Integer.parseInt(req.getParameter("department")));
+                Optional<Job> job = jobService.get(Integer.parseInt(req.getParameter("job")));
 
                 employee.setName(name);
                 employee.setEmail(email);
