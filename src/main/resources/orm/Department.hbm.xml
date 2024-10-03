@@ -8,7 +8,7 @@
         </id>
         <property name="name" column="name" type="string"/>
 
-        <list name="employees" cascade="all" fetch="select">
+        <list name="employees" cascade="all" fetch="select" >
             <key column="department_id"/>
             <list-index column="employee_index"/>
             <one-to-many class="entities.Employee"/>

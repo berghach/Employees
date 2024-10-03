@@ -8,8 +8,10 @@ import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import java.util.List;
+import java.util.Optional;
 
-public class JobDAO {
+public class JobDAO implements DAO<Job>{
+    @Override
     public void save(Job job) throws SystemException {
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
@@ -21,19 +23,22 @@ public class JobDAO {
             e.printStackTrace();
         }
     }
-    public Job get(int id) {
+    @Override
+    public Optional<Job> get(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Job.class, id);
+            return Optional.ofNullable(session.get(Job.class, id));
         }
     }
 
-    public List<Job> list() {
+    @Override
+    public List<Job> getAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Job> query = session.createQuery("from Job", Job.class);
             return query.list();
         }
     }
 
+    @Override
     public void update(Job job) throws SystemException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -46,18 +51,17 @@ public class JobDAO {
         }
     }
 
-    public void delete(int id) throws SystemException {
+    public boolean delete(Job job) throws SystemException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = (Transaction) session.beginTransaction();
-            Job job = session.get(Job.class, id);
-            if (job != null) {
-                session.delete(job);
-            }
+            session.delete(job);
             transaction.commit();
+            return true;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
+            return false;
         }
     }
 }

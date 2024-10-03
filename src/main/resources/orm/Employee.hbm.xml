@@ -11,10 +11,10 @@
         <property name="phone" column="phone" type="string"/>
 
         <!-- Many-to-One relationship with Department -->
-        <many-to-one name="department" class="entities.Department" column="department_id" not-null="true" fetch="join"/>
+        <many-to-one name="department" class="entities.Department" column="department_id" not-null="true" fetch="select" lazy="false"/>
 
         <!-- Many-to-One relationship with Job -->
-        <many-to-one name="job" class="entities.Job" column="job_id" not-null="true" fetch="join"/>
+        <many-to-one name="job" class="entities.Job" column="job_id" not-null="true" fetch="select" lazy="false"/>
 
         <!-- Define the filter -->
 

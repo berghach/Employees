@@ -8,8 +8,10 @@ import org.hibernate.query.Query;
 import util.HibernateUtil;
 
 import java.util.List;
+import java.util.Optional;
 
-public class DepartmentDAO {
+public class DepartmentDAO implements DAO<Department> {
+    @Override
     public void save(Department department) throws SystemException {
         Transaction transaction = null;
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
@@ -21,19 +23,21 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
     }
-    public Department get(int id) {
+    @Override
+    public Optional<Department> get(long id) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            return session.get(Department.class, id);
+            return Optional.ofNullable(session.get(Department.class, id));
         }
     }
 
-    public List<Department> list() {
+    @Override
+    public List<Department> getAll() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Department> query = session.createQuery("from Department", Department.class);
             return query.list();
         }
     }
-
+    @Override
     public void update(Department department) throws SystemException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
@@ -45,19 +49,18 @@ public class DepartmentDAO {
             e.printStackTrace();
         }
     }
-
-    public void delete(int id) throws SystemException {
+    @Override
+    public boolean delete(Department department) throws SystemException {
         Transaction transaction = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             transaction = (Transaction) session.beginTransaction();
-            Department department = session.get(Department.class, id);
-            if (department != null) {
-                session.delete(department);
-            }
+            session.delete(department);
             transaction.commit();
+            return true;
         } catch (Exception e) {
             if (transaction != null) transaction.rollback();
             e.printStackTrace();
+            return false;
         }
     }
 }

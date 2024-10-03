@@ -15,14 +15,15 @@ public class EmployeeTest {
         DepartmentDAO departmentDAO = new DepartmentDAO();
         JobDAO jobDAO = new JobDAO();
 
-        Employee employee = employeeDAO.get(1);
-        System.out.println(employee.toString());
+        Optional<Employee> employee = employeeDAO.get(1);
+        employee.ifPresent(value -> System.out.println(value.toString()));
 
         List<Employee> rs = employeeDAO.getByName("David Wilson");
         System.out.println(rs.get(0).toString());
 
-        Department department = departmentDAO.get(1);
-        List<Employee> hr = employeeDAO.getByDepartment(department);
+        Optional<Department> department = departmentDAO.get(1);
+        assert department.orElse(null) != null;
+        List<Employee> hr = employeeDAO.getByDepartment(department.get());
         for(Employee item : hr){
             System.out.println(item.toString());
         }
