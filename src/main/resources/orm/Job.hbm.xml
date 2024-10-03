@@ -9,7 +9,7 @@
         <property name="name" column="name" type="string"/>
 
         <!-- Many-to-One relationship with Department -->
-        <many-to-one name="department" class="entities.Department" column="department_id" not-null="true"/>
+        <many-to-one name="department" class="entities.Department" column="department_id" not-null="true" fetch="select" lazy="false"/>
 
         <list name="employees" cascade="all" fetch="select">
             <key column="job_id"/>
