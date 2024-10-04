@@ -34,17 +34,84 @@ public class EmployeeServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String action = req.getParameter("action");
+        if (action == null) {
+            showAllEmployees(req, resp);
+            return;
+        }
+        switch(action){
+            case "add":
+                showAddEmployee(req, resp);
+                break;
+            case "edit":
+                ShowEditEmployee(req, resp);
+                break;
+            /*case "search":
+                searchEmployees(req, resp);
+                break;
+            case "filter":
+                filterEmployees(req, resp);
+                break;*/
+
+            default:
+                showAllEmployees(req, resp);
+
+        }
+    }
+    private void showAllEmployees(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
+        List<Employee> employeeList = employeeService.getAll();
+        req.setAttribute("employees", employeeList);
+        req.getRequestDispatcher("views/index.jsp").forward(req, resp);
+    }
+    private void showAddEmployee(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         List<Employee> employeeList = employeeService.getAll();
         List<Department> departmentList = departmentService.getAll();
         List<Job> jobList = jobService.getAll();
         req.setAttribute("employees", employeeList);
         req.setAttribute("departments", departmentList);
         req.setAttribute("jobs", jobList);
-        req.getRequestDispatcher("/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("views/addEmployee.jsp").forward(req, resp);
+    }
+    private void ShowEditEmployee(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
+        List<Department> departmentList = departmentService.getAll();
+        List<Job> jobList = jobService.getAll();
+        req.setAttribute("departments", departmentList);
+        req.setAttribute("jobs", jobList);
+        String idParm = req.getParameter("id");
+        if (idParm != null) {
+            long id = Integer.parseInt(idParm);
+            Optional<Employee> employee = employeeService.get(id);
+            if (employee.isPresent()) {
+                req.setAttribute("employee", employee.get());
+                req.getRequestDispatcher("views/editEmployee.jsp").forward(req, resp);
+            }
+            else {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "not found");
+            }
+        }else {
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid employee details");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+
+        switch (method != null ? method.toUpperCase() : "") {
+            case "PUT":
+                doPut(req, resp);
+                break;
+            case "DELETE":
+                doDelete(req, resp);
+                break;
+            case "POST":
+            default:
+                createEmployee(req, resp);
+                break;
+        }
+    }
+
+    private void createEmployee(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String name = req.getParameter("name");
             String email = req.getParameter("email");
@@ -60,6 +127,7 @@ public class EmployeeServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to create employee");
         }
     }
+
 
     @Override
     protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -82,7 +150,7 @@ public class EmployeeServlet extends HttpServlet {
                 employee.setJob(job.orElse(null));
 
                 employeeService.update(employee);
-                resp.sendRedirect("employees");
+                resp.sendRedirect("/");
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Employee not found");
             }
@@ -101,6 +169,7 @@ public class EmployeeServlet extends HttpServlet {
             if (employeeOptional.isPresent()) {
                 employeeService.delete(employeeOptional.get());
                 resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                resp.sendRedirect("/");
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Employee not found");
             }
