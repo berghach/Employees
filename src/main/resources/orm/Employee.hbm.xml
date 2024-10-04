@@ -18,15 +18,10 @@
 
         <!-- Define the filter -->
 
-        <filter name="nameFilter" condition="name = :nameFilterParam" />
         <filter name="departmentFilter" condition="department_id = :departmentFilterParam" />
         <filter name="jobFilter" condition="job_id = :jobFilterParam" />
 
     </class>
-
-    <filter-def name="nameFilter">
-        <filter-param name="nameFilterParam" type="string"/>
-    </filter-def>
 
     <filter-def name="departmentFilter">
         <filter-param name="departmentFilterParam" type="int"/>
