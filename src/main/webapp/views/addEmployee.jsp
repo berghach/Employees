@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Add Employee</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
     <h1>Add Employee</h1>
@@ -34,8 +35,7 @@
            <th>Phone</th>
            <th>Job</th>
            <th>Department</th>
-           <th>Actions</th>
-       </tr>
+      </tr>
 
        <c:forEach var="employee" items="${employees}">
            <tr>
@@ -45,10 +45,6 @@
                <td>${employee.phone}</td>
                <td>${employee.job.name}</td>
                <td>${employee.department.name}</td>
-               <td>
-                   <a href="/employees?action=edit&id=${employee.id}">Edit</a>
-                   <a href="/employees?action=delete&id=${employee.id}">Delete</a>
-              </td>
            </tr>
        </c:forEach>
    </table>
