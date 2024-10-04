@@ -35,10 +35,19 @@ public class EmployeeDAO implements DAO<Employee>{
         }
     }
 
-    public List<Employee> getByName(String name) {
+    public List<Employee> getByNameOrEmail(String searchQuery) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-            session.enableFilter("nameFilter").setParameter("nameFilterParam", name);
+            String hql = "FROM Employee e WHERE e.name LIKE :searchQuery OR e.email LIKE :searchQuery";
+            return session.createQuery(hql, Employee.class)
+                    .setParameter("searchQuery", "%" + searchQuery + "%")  // Partial match with LIKE
+                    .list();
+        }
+    }
+    public List<Employee> getByEmail(String name) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            session.enableFilter("emailFilter").setParameter("emailFilterParam", name);
 
             return session.createQuery("from Employee", Employee.class).list();
         }

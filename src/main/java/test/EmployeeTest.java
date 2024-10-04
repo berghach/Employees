@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class EmployeeTest {
-    public static void main(String[] args){
+   /* public static void main(String[] args){
         EmployeeDAO employeeDAO = new EmployeeDAO();
         DepartmentDAO departmentDAO = new DepartmentDAO();
         JobDAO jobDAO = new JobDAO();
@@ -28,5 +28,5 @@ public class EmployeeTest {
             System.out.println(item.toString());
         }
 
-    }
+    }*/
 }

@@ -17,8 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class EmployeeServlet extends HttpServlet {
     private EmployeeService employeeService;
@@ -46,23 +48,51 @@ public class EmployeeServlet extends HttpServlet {
             case "edit":
                 ShowEditEmployee(req, resp);
                 break;
-            /*case "search":
-                searchEmployees(req, resp);
-                break;
-            case "filter":
-                filterEmployees(req, resp);
-                break;*/
-
             default:
                 showAllEmployees(req, resp);
 
         }
     }
-    private void showAllEmployees(HttpServletRequest req, HttpServletResponse resp)throws ServletException, IOException{
+    private void showAllEmployees(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Employee> employeeList = employeeService.getAll();
+
+        String searchQuery = req.getParameter("searchQuery");
+        String departmentQuery = req.getParameter("department");
+        String jobQuery = req.getParameter("job");
+
+        if (searchQuery != null && !searchQuery.trim().isEmpty()) {
+            employeeList = employeeService.searchEmployees(searchQuery);
+            if (employeeList.isEmpty()) {
+                req.setAttribute("message", "No employees match your search query.");
+            }
+        }
+
+        if (departmentQuery != null && !departmentQuery.trim().isEmpty()) {
+            employeeList = employeeService.filterByDepartment(departmentQuery);
+            if (employeeList.isEmpty()) {
+                req.setAttribute("message", "No employees found in the selected department.");
+            }
+        }
+
+        if (jobQuery != null && !jobQuery.trim().isEmpty()) {
+            employeeList = employeeService.filterByJob(jobQuery);
+            if (employeeList.isEmpty()) {
+                req.setAttribute("message", "No employees found with the selected job.");
+            }
+        }
+
         req.setAttribute("employees", employeeList);
+
+        List<Department> departmentList = departmentService.getAll();
+        req.setAttribute("departments", departmentList);
+
+        List<Job> jobList = jobService.getAll();
+        req.setAttribute("jobs", jobList);
+
         req.getRequestDispatcher("views/index.jsp").forward(req, resp);
     }
+
+
     private void showAddEmployee(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException{
         List<Employee> employeeList = employeeService.getAll();
         List<Department> departmentList = departmentService.getAll();
@@ -92,7 +122,33 @@ public class EmployeeServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid employee details");
         }
     }
+   /* private void searchEmployees(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String searchQuery = req.getParameter("searchQuery");
+        List<Employee> employees = employeeService.getAll();
 
+        if (searchQuery != null && !searchQuery.trim().isEmpty()){
+            List<Employee> filteredEmployees = employees.stream()
+                    .filter(e -> e.getName().toLowerCase().contains(searchQuery.toLowerCase()) ||
+                            e.getEmail().toLowerCase().contains(searchQuery.toLowerCase()))
+                    .collect(Collectors.toList());
+            if (!filteredEmployees.isEmpty()) {
+                req.setAttribute("employees", filteredEmployees);
+            } else {
+                req.setAttribute("message", "Aucun employé ne correspond à la recherche.");
+            }
+        }else {
+            if (!employees.isEmpty()) {
+                req.setAttribute("employees", employees);
+            } else {
+                req.setAttribute("message", "Aucun employé trouvé dans le système.");
+            }
+        }
+
+
+        req.setAttribute("employees", employees);
+        req.getRequestDispatcher("views/employees.jsp").forward(req, resp);
+    }
+*/
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("_method");
