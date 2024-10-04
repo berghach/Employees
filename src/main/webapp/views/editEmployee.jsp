@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Edit Employee <c:out value="${employee.name}"/></title>
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
 </head>
 <body>
     <h1>Edit Employee: <c:out value="${employee.name}"/></h1>

@@ -122,33 +122,7 @@ public class EmployeeServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid employee details");
         }
     }
-   /* private void searchEmployees(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String searchQuery = req.getParameter("searchQuery");
-        List<Employee> employees = employeeService.getAll();
 
-        if (searchQuery != null && !searchQuery.trim().isEmpty()){
-            List<Employee> filteredEmployees = employees.stream()
-                    .filter(e -> e.getName().toLowerCase().contains(searchQuery.toLowerCase()) ||
-                            e.getEmail().toLowerCase().contains(searchQuery.toLowerCase()))
-                    .collect(Collectors.toList());
-            if (!filteredEmployees.isEmpty()) {
-                req.setAttribute("employees", filteredEmployees);
-            } else {
-                req.setAttribute("message", "Aucun employé ne correspond à la recherche.");
-            }
-        }else {
-            if (!employees.isEmpty()) {
-                req.setAttribute("employees", employees);
-            } else {
-                req.setAttribute("message", "Aucun employé trouvé dans le système.");
-            }
-        }
-
-
-        req.setAttribute("employees", employees);
-        req.getRequestDispatcher("views/employees.jsp").forward(req, resp);
-    }
-*/
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getParameter("_method");
