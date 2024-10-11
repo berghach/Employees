@@ -30,6 +30,7 @@
         <button type="submit">Search</button>
     </form>
     <a href="/employees?action=add">Add Employee</a>
+        <a href="/department">Add Department</a>
 
         <table border="1">
            <tr>

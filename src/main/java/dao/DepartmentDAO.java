@@ -2,7 +2,7 @@ package dao;
 
 import entities.Department;
 import jakarta.transaction.SystemException;
-import jakarta.transaction.Transaction;
+import org.hibernate.Transaction;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import util.HibernateUtil;
